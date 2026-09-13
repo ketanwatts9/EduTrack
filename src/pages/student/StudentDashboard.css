@@ -1,0 +1,164 @@
+/* ===== Student Dashboard ===== */
+.student-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+}
+
+.dash-section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+.dash-section__link {
+  color: var(--color-primary);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.dash-section h2 {
+  font-size: 1.25rem;
+  margin-bottom: var(--space-2);
+}
+
+/* Continue learning cards */
+.continue-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.continue-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-1);
+  transition: var(--transition);
+}
+
+.continue-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.continue-card__img {
+  width: 100px;
+  height: 64px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.continue-card__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.continue-card__body h3 {
+  font-size: 0.95rem;
+  margin-bottom: 0.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.continue-card__meta {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.continue-card__progress {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.continue-card__progress .progress-bar {
+  flex: 1;
+  max-width: 200px;
+}
+
+/* Course grid reuse from Home */
+.student-dashboard .course-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+}
+
+/* Certificates list */
+.cert-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.cert-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2);
+}
+
+.cert-item__icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.cert-item__body {
+  flex: 1;
+}
+
+.cert-item__body h3 {
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+}
+
+.cert-item__body p {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .student-dashboard .course-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .stat-grid {
+    grid-template-columns: 1fr;
+  }
+  .student-dashboard .course-grid {
+    grid-template-columns: 1fr;
+  }
+  .continue-card {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+  .continue-card__img {
+    width: 100%;
+    height: 140px;
+  }
+}

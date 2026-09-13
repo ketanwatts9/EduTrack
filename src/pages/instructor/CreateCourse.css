@@ -1,0 +1,48 @@
+/* ===== Create Course Page ===== */
+.create-course {
+  max-width: 700px;
+}
+
+.create-course__form {
+  margin-top: var(--space-3);
+}
+
+.create-course__section {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.create-course__section-title {
+  font-size: 1.1rem;
+  margin-bottom: var(--space-2);
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.create-course__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+
+.create-course__actions {
+  display: flex;
+  gap: var(--space-1);
+  justify-content: flex-end;
+  margin-top: var(--space-2);
+}
+
+@media (max-width: 600px) {
+  .create-course__row {
+    grid-template-columns: 1fr;
+  }
+  .create-course__actions {
+    justify-content: stretch;
+  }
+  .create-course__actions .btn {
+    width: 100%;
+  }
+}

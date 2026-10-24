@@ -1,10 +1,13 @@
 // ===== Login Page =====
 // Simulated authentication against mock user data.
+// Uses the reusable useForm hook + validation strategies.
 
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth.js'
 import { useData } from '../hooks/useData.js'
+import { useForm } from '../hooks/useForm.js'
+import { required, isEmail } from '../utils/validation.js'
 import InputField from '../components/InputField.jsx'
 import Button from '../components/Button.jsx'
 import './Auth.css'
@@ -15,9 +18,27 @@ export default function Login() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
+  const validate = (values) => {
+    const errors = {}
+    const emailErr = required(values.email, 'Email')
+    if (emailErr) errors.email = emailErr
+    else {
+      const emailValid = isEmail(values.email)
+      if (emailValid) errors.email = emailValid
+    }
+
+    const passErr = required(values.password, 'Password')
+    if (passErr) errors.password = passErr
+
+    return errors
+  }
+
+  const { values, errors, handleChange, handleBlur, setFieldValue, validateAll } = useForm({
+    initialValues: { email: '', password: '' },
+    validate,
+  })
+
+  const [formError, setFormError] = useState('')
   const [loading, setLoading] = useState(false)
 
   // If already logged in, redirect to dashboard
@@ -28,15 +49,29 @@ export default function Login() {
     }
   }, [user, navigate])
 
+  const fillDemo = (role) => {
+    const accounts = {
+      student: { email: 'student@example.com', password: 'student123' },
+      instructor: { email: 'instructor@example.com', password: 'instructor123' },
+      admin: { email: 'admin@example.com', password: 'admin123' },
+    }
+    setFieldValue('email', accounts[role].email)
+    setFieldValue('password', accounts[role].password)
+    setFormError('')
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
-    setError('')
+    setFormError('')
+
+    if (!validateAll()) return
+
     setLoading(true)
 
     // Simulate auth check
     setTimeout(() => {
       const found = users.find(
-        (u) => u.email === email.trim().toLowerCase() && u.password === password
+        (u) => u.email === values.email.trim().toLowerCase() && u.password === values.password
       )
 
       if (found) {
@@ -45,21 +80,10 @@ export default function Login() {
         const from = location.state?.from
         navigate(from || dashboards[found.role], { replace: true })
       } else {
-        setError('Invalid email or password. Try the demo accounts below.')
+        setFormError('Invalid email or password. Try the demo accounts below.')
       }
       setLoading(false)
     }, 500)
-  }
-
-  const fillDemo = (role) => {
-    const accounts = {
-      student: { email: 'student@example.com', password: 'student123' },
-      instructor: { email: 'instructor@example.com', password: 'instructor123' },
-      admin: { email: 'admin@example.com', password: 'admin123' },
-    }
-    setEmail(accounts[role].email)
-    setPassword(accounts[role].password)
-    setError('')
   }
 
   return (
@@ -68,25 +92,29 @@ export default function Login() {
         <h1 className="auth-card__title">Welcome Back</h1>
         <p className="auth-card__subtitle">Login to your EduTrack account</p>
 
-        <form onSubmit={handleSubmit} className="auth-form">
+        <form onSubmit={handleSubmit} className="auth-form" noValidate>
           <InputField
             label="Email"
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={values.email}
+            onChange={handleChange('email')}
+            onBlur={handleBlur('email')}
+            error={errors.email}
             placeholder="you@example.com"
             required
           />
           <InputField
             label="Password"
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={values.password}
+            onChange={handleChange('password')}
+            onBlur={handleBlur('password')}
+            error={errors.password}
             placeholder="Enter your password"
             required
           />
 
-          {error && <p className="auth-error">{error}</p>}
+          {formError && <p className="auth-error">{formError}</p>}
 
           <Button type="submit" variant="primary" fullWidth size="lg" disabled={loading}>
             {loading ? 'Logging in...' : 'Login'}
